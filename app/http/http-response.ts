@@ -1,15 +1,14 @@
 export type StatusCode = "200" | "400" | "500" | "404";
 
 export class HTTPResponse {
-    constructor(init: Partial<HTTPResponse> = {}) {
-        Object.assign(this, init);
-    }
-
-
     statusCode: StatusCode = "200";
     reason: string = "";
     headers: { [key: string]: string } = {};
     body: string = "";
+
+    constructor(init: Partial<HTTPResponse> = {}) {
+        Object.assign(this, init);
+    }
 
     responseFullyFormatted(): string {
         const emptyLine = "\r\n";
