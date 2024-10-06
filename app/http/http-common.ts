@@ -11,25 +11,18 @@ export function parseHeaders(headerLines: string[]): Headers {
         if (line === '') break;
         const [key, value] = line.split(': ', 2);
         if (key && value) {
-            if (key === "Accept-Encoding") {
-
-                const encodingList = value.split(',').map(encoding => encoding.trim());
-
-                if (encodingList.includes("gzip")) {
-                    headers["Content-Encoding"] = "gzip"
-
-                }
-            } else {
-                headers[key] = value;
-            }
+            headers[key] = value;
         }
     }
     return headers;
 }
 
 export function formatHeaders(headers: Headers): string {
-    return Object.entries(headers)
-        .map(([key, value]) => `${key}: ${value}`)
-        .join(CRLF);
+    //remove "Accept-Encoding" Header
+    delete headers["Accept-Encoding"];
+
+    return Object.entries(headers).map(([key, value]) => {
+        return `${key}: ${value}`;
+    }).join(CRLF);
 }
 

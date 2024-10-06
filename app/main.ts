@@ -15,7 +15,6 @@ const server = net.createServer((socket) => {
             response = new HTTPResponse({ statusCode: "200", reason: "OK" });
         } else if (path.startsWith("/echo/")) {
             const resource = path.slice(6);
-            console.log(headers)
             response = new HTTPResponse({
                 statusCode: "200", reason: "OK", headers: {
                     "Content-Type": "text/plain",
