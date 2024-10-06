@@ -1,5 +1,6 @@
 export type Headers = { [key: string]: string };
-export type StatusCode = "200" | "400" | "404" | "500";
+export type StatusCode = "200" | "400" | "404" | "500" | "201";
+export type Method = "GET" | "POST" | "PUT" | "DELETE";
 
 export const CRLF = '\r\n';
 

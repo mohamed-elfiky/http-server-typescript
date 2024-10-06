@@ -1,19 +1,20 @@
-import { parseHeaders, type Headers } from './http-common';
+import { parseHeaders, type Headers, type Method } from './http-common';
 
 export class HTTPParser {
 
-    parseRequest(request: string): { path: string, headers: Headers } {
+    parseRequest(request: string): { path: string, headers: Headers, method: Method, body: string } {
         const requestLines = request.split('\r\n');
 
         if (requestLines.length === 0) {
             throw new Error('Invalid HTTP request');
         }
 
-        const path = requestLines[0].split(' ')[1];
+        const [method, path, httpVersion] = requestLines[0].split(' ');
+
         const headers = parseHeaders(requestLines.slice(1));
 
-        console.log(headers)
+        const body = requestLines[requestLines.length - 1];
 
-        return { path, headers };
+        return { path, headers, method: method as Method, body };
     }
 }

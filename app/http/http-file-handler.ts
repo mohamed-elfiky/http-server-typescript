@@ -13,6 +13,10 @@ export class HTTPFileHandler {
     getFile(fileName: string): string {
         return fs.readFileSync(path.join(this.basePath, fileName)).toString();
     }
+
+    saveFile(fileName: string, content: string): void {
+        fs.writeFileSync(path.join(this.basePath, fileName), content);
+    }
 }
 
 
