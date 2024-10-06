@@ -1,4 +1,4 @@
-export type StatusCode = "200" | "400" | "500";
+export type StatusCode = "200" | "400" | "500" | "404";
 
 export class HTTPResponse {
     constructor(init: Partial<HTTPResponse> = {}) {

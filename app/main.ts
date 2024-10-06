@@ -1,17 +1,21 @@
 import * as net from "net";
 import { HTTPResponse } from "./http/http-response";
-
-// You can use print statements as follows for debugging, they'll be visible when running tests.
-console.log("Logs from your program will appear here!");
+import { HTTPParser } from "./http/http-parser";
 
 const server = net.createServer((socket) => {
+    const httpParser = new HTTPParser();
 
-    const httpResponse = new HTTPResponse({
-        statusCode: "200", reason: "OK"
-    });
+    socket.on("data", (data) => {
+        const request = data.toString();
+        const path = httpParser.parseRequest(request);
 
+        if (path === "/") {
+            socket.write(new HTTPResponse({ statusCode: "200", reason: "OK" }).responseFullyFormatted());
+        } else {
+            socket.write(new HTTPResponse({ statusCode: "404", reason: "Not Found" }).responseFullyFormatted());
+        }
 
-    socket.write(Buffer.from(httpResponse.responseFullyFormatted()))
+    })
 
     socket.on("close", () => {
         socket.end();
