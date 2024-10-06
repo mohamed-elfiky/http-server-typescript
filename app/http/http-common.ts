@@ -1,6 +1,7 @@
 export type Headers = { [key: string]: string };
 export type StatusCode = "200" | "400" | "404" | "500" | "201";
 export type Method = "GET" | "POST" | "PUT" | "DELETE";
+export type Encodings = "gzip";
 
 export const CRLF = '\r\n';
 
@@ -10,7 +11,13 @@ export function parseHeaders(headerLines: string[]): Headers {
         if (line === '') break;
         const [key, value] = line.split(': ', 2);
         if (key && value) {
-            headers[key] = value;
+            if (key === "Accept-Encoding") {
+                if (value === "gzip") {
+                    headers["Content-Encoding"] = "gzip"
+                }
+            } else {
+                headers[key] = value;
+            }
         }
     }
     return headers;

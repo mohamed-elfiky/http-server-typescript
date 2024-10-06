@@ -15,11 +15,12 @@ const server = net.createServer((socket) => {
             response = new HTTPResponse({ statusCode: "200", reason: "OK" });
         } else if (path.startsWith("/echo/")) {
             const resource = path.slice(6);
-
+            console.log(headers)
             response = new HTTPResponse({
                 statusCode: "200", reason: "OK", headers: {
                     "Content-Type": "text/plain",
                     "Content-Length": resource.length.toString(),
+                    ...headers
                 }, body: resource
             });
         } else if (path.startsWith("/user-agent")) {
