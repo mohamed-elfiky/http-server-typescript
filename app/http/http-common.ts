@@ -12,8 +12,12 @@ export function parseHeaders(headerLines: string[]): Headers {
         const [key, value] = line.split(': ', 2);
         if (key && value) {
             if (key === "Accept-Encoding") {
-                if (value === "gzip") {
+
+                const encodingList = value.split(',').map(encoding => encoding.trim());
+
+                if (encodingList.includes("gzip")) {
                     headers["Content-Encoding"] = "gzip"
+
                 }
             } else {
                 headers[key] = value;
@@ -28,3 +32,4 @@ export function formatHeaders(headers: Headers): string {
         .map(([key, value]) => `${key}: ${value}`)
         .join(CRLF);
 }
+
