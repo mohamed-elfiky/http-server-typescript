@@ -1,6 +1,7 @@
 import * as net from "net";
 import { HTTPResponse } from "./http/http-response";
 import { HTTPParser } from "./http/http-parser";
+import fileHandler from './http/http-file-handler'
 
 const server = net.createServer((socket) => {
     const httpParser = new HTTPParser();
@@ -30,6 +31,28 @@ const server = net.createServer((socket) => {
                     "Content-Length": userAgent.length.toString(),
                 }, body: userAgent
             });
+        } else if (path.startsWith("/files/")) {
+            const filePath = path.slice(7);
+
+            try {
+                const fileContent = fileHandler.getFile(filePath);
+                response = new HTTPResponse({
+                    statusCode: "200",
+                    reason: "OK",
+                    headers: {
+                        "Content-Type": "application/octet-stream",
+                        "Content-Length": fileContent.length.toString(),
+                    },
+                    body: fileContent
+                })
+
+            } catch (error: any) {
+                if (error.code === "ENOENT") {
+                    response = new HTTPResponse({ statusCode: "404", reason: "Not Found" });
+                } else {
+                    response = new HTTPResponse({ statusCode: "500", reason: "Internal Server Error" });
+                }
+            }
         }
         else {
             response = new HTTPResponse({ statusCode: "404", reason: "Not Found" });
