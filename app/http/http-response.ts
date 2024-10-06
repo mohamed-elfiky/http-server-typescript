@@ -1,3 +1,5 @@
+import { formatHeaders, CRLF } from "./http-common";
+
 export type StatusCode = "200" | "400" | "500" | "404";
 
 export class HTTPResponse {
@@ -11,12 +13,10 @@ export class HTTPResponse {
     }
 
     responseFullyFormatted(): string {
-        const emptyLine = "\r\n";
-        const headerString = Object.entries(this.headers)
-            .map(([key, value]) => `${key}: ${value}`)
-            .join(emptyLine);
+        const statusLine = `HTTP/1.1 ${this.statusCode} ${this.reason}`;
+        const headerString = formatHeaders(this.headers);
 
-        const response = `HTTP/1.1 ${this.statusCode} ${this.reason}${emptyLine}${headerString}${emptyLine}${emptyLine}${this.body}`;
+        const response = `${statusLine}${CRLF}${headerString}${CRLF}${CRLF}${this.body}`;
         return response;
     }
 }

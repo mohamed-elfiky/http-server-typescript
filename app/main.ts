@@ -7,7 +7,7 @@ const server = net.createServer((socket) => {
 
     socket.on("data", (data) => {
         const request = data.toString();
-        const { path } = httpParser.parseRequest(request);
+        const { path, headers } = httpParser.parseRequest(request);
         let response: HTTPResponse;
 
         if (path === "/") {
@@ -21,7 +21,17 @@ const server = net.createServer((socket) => {
                     "Content-Length": resource.length.toString(),
                 }, body: resource
             });
-        } else {
+        } else if (path.startsWith("/user-agent")) {
+            const userAgent = headers["User-Agent"] || '';
+
+            response = new HTTPResponse({
+                statusCode: "200", reason: "OK", headers: {
+                    "Content-Type": "text/plain",
+                    "Content-Length": userAgent.length.toString(),
+                }, body: userAgent
+            });
+        }
+        else {
             response = new HTTPResponse({ statusCode: "404", reason: "Not Found" });
         }
 
