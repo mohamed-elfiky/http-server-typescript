@@ -7,13 +7,25 @@ const server = net.createServer((socket) => {
 
     socket.on("data", (data) => {
         const request = data.toString();
-        const path = httpParser.parseRequest(request);
+        const { path } = httpParser.parseRequest(request);
+        let response: HTTPResponse;
 
         if (path === "/") {
-            socket.write(new HTTPResponse({ statusCode: "200", reason: "OK" }).responseFullyFormatted());
+            response = new HTTPResponse({ statusCode: "200", reason: "OK" });
+        } else if (path.startsWith("/echo/")) {
+            const resource = path.slice(6);
+
+            response = new HTTPResponse({
+                statusCode: "200", reason: "OK", headers: {
+                    "Content-Type": "text/plain",
+                    "Content-Length": resource.length.toString(),
+                }, body: resource
+            });
         } else {
-            socket.write(new HTTPResponse({ statusCode: "404", reason: "Not Found" }).responseFullyFormatted());
+            response = new HTTPResponse({ statusCode: "404", reason: "Not Found" });
         }
+
+        socket.write(response.responseFullyFormatted());
 
     })
 

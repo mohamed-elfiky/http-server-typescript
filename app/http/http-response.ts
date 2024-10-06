@@ -16,7 +16,7 @@ export class HTTPResponse {
             .map(([key, value]) => `${key}: ${value}`)
             .join(emptyLine);
 
-        const response = `HTTP/1.1 ${this.statusCode} ${this.reason}${emptyLine}${headerString}${emptyLine}${this.body}`;
+        const response = `HTTP/1.1 ${this.statusCode} ${this.reason}${emptyLine}${headerString}${emptyLine}${emptyLine}${this.body}`;
         return response;
     }
 }

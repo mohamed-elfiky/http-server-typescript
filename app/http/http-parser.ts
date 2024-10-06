@@ -1,6 +1,6 @@
 export class HTTPParser {
 
-    parseRequest(request: string) {
+    parseRequest(request: string): { path: string } {
         const requestLines = request.split('\r\n');
 
         if (requestLines.length === 0) {
@@ -10,7 +10,6 @@ export class HTTPParser {
         const path = requestLines[0].split(' ')[1];
 
 
-        return path
-
+        return { path };
     }
 }
