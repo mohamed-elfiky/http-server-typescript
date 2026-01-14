@@ -2,6 +2,7 @@ export type Headers = { [key: string]: string };
 export type StatusCode = "200" | "400" | "404" | "500" | "201";
 export type Method = "GET" | "POST" | "PUT" | "DELETE";
 export type Encodings = "gzip";
+import type { Socket } from 'net'
 
 export const CRLF = '\r\n';
 
@@ -26,3 +27,8 @@ export function formatHeaders(headers: Headers): string {
     }).join(CRLF);
 }
 
+
+export function closeConnection(headers: Headers, socket: Socket) {
+    const shouldCloseConnection = headers["close-connection"];
+    socket.end()
+}

@@ -2,6 +2,7 @@ import * as net from "net";
 import { HTTPResponse } from "./http/http-response";
 import { HTTPParser } from "./http/http-parser";
 import fileHandler from './http/http-file-handler'
+import { closeConnection } from "./http/http-common";
 
 const server = net.createServer((socket) => {
     const httpParser = new HTTPParser();
@@ -64,7 +65,7 @@ const server = net.createServer((socket) => {
         }
 
         socket.write(response.responseFullyFormatted());
-
+        closeConnection(headers, socket)
     })
 
     socket.on("close", () => {
