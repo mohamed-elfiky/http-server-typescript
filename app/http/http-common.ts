@@ -30,5 +30,5 @@ export function formatHeaders(headers: Headers): string {
 
 export function closeConnection(headers: Headers, socket: Socket) {
     const shouldCloseConnection = headers["Connection-close"];
-    shouldCloseConnection && socket.end()
+    shouldCloseConnection && (headers["Connection"] = "close") && socket.end()
 }
