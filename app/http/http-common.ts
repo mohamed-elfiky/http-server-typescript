@@ -27,8 +27,3 @@ export function formatHeaders(headers: Headers): string {
     }).join(CRLF);
 }
 
-
-export function closeConnection(headers: Headers, socket: Socket) {
-    const shouldCloseConnection = headers["Connection-close"];
-    shouldCloseConnection && (headers["Connection"] = "close") && socket.end()
-}
