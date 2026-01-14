@@ -56,6 +56,8 @@ const server = net.createServer((socket) => {
             } else if (method === "POST") {
                 fileHandler.saveFile(filePath, body);
                 response = new HTTPResponse({ statusCode: "201", reason: "Created" });
+            } else {
+                response = new HTTPResponse({ statusCode: "405", reason: "Method Not Allowed" });
             }
 
         }
@@ -64,7 +66,8 @@ const server = net.createServer((socket) => {
         }
 
         const shouldCloseConnection = !!headers["Connection-close"];
-        shouldCloseConnection && (headers["Connection"] = "close")
+        shouldCloseConnection && (response.headers["Connection"] = "close")
+
 
         socket.write(response.responseFullyFormatted());
         shouldCloseConnection && socket.end()
