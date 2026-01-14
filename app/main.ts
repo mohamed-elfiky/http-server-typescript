@@ -63,7 +63,7 @@ const server = net.createServer((socket) => {
             response = new HTTPResponse({ statusCode: "404", reason: "Not Found" });
         }
 
-        const shouldCloseConnection = headers["Connection-close"];
+        const shouldCloseConnection = !!headers["Connection-close"];
         shouldCloseConnection && (headers["Connection"] = "close")
 
         socket.write(response.responseFullyFormatted());
