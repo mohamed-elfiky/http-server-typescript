@@ -2,7 +2,6 @@ import * as net from "net";
 import { HTTPResponse } from "./http/http-response";
 import { HTTPParser } from "./http/http-parser";
 import fileHandler from './http/http-file-handler'
-import { closeConnection } from "./http/http-common";
 
 const server = net.createServer((socket) => {
     const httpParser = new HTTPParser();
@@ -63,11 +62,11 @@ const server = net.createServer((socket) => {
         else {
             response = new HTTPResponse({ statusCode: "404", reason: "Not Found" });
         }
+
         const shouldCloseConnection = headers["Connection-close"];
         shouldCloseConnection && (headers["Connection"] = "close")
 
         socket.write(response.responseFullyFormatted());
-        closeConnection(headers, socket)
         shouldCloseConnection && socket.end()
 
     })
