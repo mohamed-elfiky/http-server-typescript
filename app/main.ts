@@ -9,7 +9,7 @@ const server = net.createServer((socket) => {
     socket.on("data", (data) => {
         const request = data.toString();
         const { path, headers, method, body } = httpParser.parseRequest(request);
-        let response: HTTPResponse;
+        let response: HTTPResponse
 
         if (path === "/") {
             response = new HTTPResponse({ statusCode: "200", reason: "OK" });
